@@ -1,0 +1,63 @@
+- name: Update SSH Authorized Keys  
+  ansible.builtin.template:  
+    src: authorized_keys.j2  
+    dest: /root/.ssh/authorized_keys
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Copy script to secure SSH
+  ansible.builtin.copy:
+    src: ./files/secure_sshd.sh
+    dest: /root/secure_sshd.sh
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Execute script to secure SSH
+  ansible.builtin.shell: /root/secure_sshd.sh
+  notify:
+    - update packages
+
+- name: Update all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+- name: Disable SELinux
+  ansible.posix.selinux:
+    state: disabled
+
+- name: Reboot the machine
+  ansible.builtin.reboot:
+
+- name: Autoremove unneeded packages installed as dependencies
+  ansible.builtin.dnf:
+    autoremove: yes
+
+- name: Install the latest version of Epel-Release Repository
+  ansible.builtin.package:
+    name: epel-release
+    state: latest
+    update_cache: yes
+  notify:
+    - update packages
+
+- name: Update all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+- name: Install common package
+  ansible.builtin.package:
+    name:
+      - vim
+      - telnet
+      - rsync
+      - net-tools
+      - htop
+      - wget
+    state: latest
+    update_cache: yes
