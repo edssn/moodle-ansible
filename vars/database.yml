@@ -1,0 +1,28 @@
+mariadb_mirror: 'mirror.insacom.cl/mariadb/yum' #https://mirmon.mariadb.org
+mariadb_bind_address: '0.0.0.0'
+mariadb_root_password: 'AWsd!23@'
+mariadb_server_cnf:
+  innodb_buffer_pool_size: 4G       # ~75% mem
+  innodb_log_file_size: 2G
+  query_cache_type: '0'
+  query_cache_size: '0'
+  table_definition_cache: 2000
+  open_files_limit: 10000
+mariadb_custom_cnf:
+  mariadb:
+    autoset_open_files_limit:
+    max-connections: '5000'
+  mysqld:
+    innodb_file_per_table: 1
+    character-set-server: utf8mb4
+    collation-server: utf8mb4_unicode_ci
+    skip-character-set-client-handshake:
+mariadb_configure_swappiness: true
+mariadb_swappiness: '30'
+mariadb_databases:
+  - name: moodle
+mariadb_users:
+  - name: mdlUser
+    password: 'AWsd!23@'
+    priv: 'mdlUser.*:ALL'
+    host: '%'

@@ -1,0 +1,51 @@
+- name: Update all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Install PHP prerequisite Packages
+  ansible.builtin.package:
+    name: 
+      - epel-release
+      - https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+    state: latest
+
+- name: Reset php module
+  ansible.builtin.command: dnf module reset php -y
+
+- name: Reset php Remi Repo
+  ansible.builtin.command: dnf module enable php:remi-7.4 -y
+
+- name: Update all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Install Php Modules 
+  ansible.builtin.package:
+    name: 
+      - php
+      - php-iconv
+      - php-mbstring
+      - php-fpm
+      - php-curl
+      - php-tokenizer
+      - php-xmlrpc
+      - php-soap
+      - php-ctype
+      - php-zip
+      - php-simplexml
+      - php-spl
+      - php-pcre
+      - php-dom
+      - php-intl
+      - php-json
+      - php-xmlreader
+      - php-ldap
+      - php-redis
+      - php-memcached
+      - php-opcache
+      - php-mysqli
+      - php-xmlrpc
+      - php-gd
+      - php-sodium
