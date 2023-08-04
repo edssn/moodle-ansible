@@ -1,2 +1,2 @@
 roles/common/templates/authorized_keys.j2
-vars/database.yml.ok
+vars/database.yml
