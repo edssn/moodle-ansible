@@ -5,6 +5,6 @@ Playbook de Ansible para Desplegar Instancias de Moodle en Servidores AlmaLinux 
 ## Requisitos
 
 ```
-ansible-galaxy install geerlingguy.mysql 
+ansible-galaxy install bertvv.mariadb geerlingguy.redis
 ansible-galaxy collection install community.crypto
 ```

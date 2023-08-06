@@ -1,5 +1,0 @@
----
-- name: Install Redis.
-  package:
-    name: "{{ redis_package }}"
-    state: present

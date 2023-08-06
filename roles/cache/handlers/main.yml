@@ -1,9 +1,4 @@
 ---
-- name: restart redis
-  service: 
-    name: redis 
-    state: restarted
-
 - name: restart disable-transparent-huge-pages
   service: 
     name: disable-transparent-huge-pages
