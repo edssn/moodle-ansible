@@ -8,7 +8,7 @@
 
 - name: Copy script to secure SSH
   ansible.builtin.copy:
-    src: ./files/secure_sshd.sh
+    src: secure_sshd.sh
     dest: /root/secure_sshd.sh
     owner: root
     group: root
@@ -17,7 +17,7 @@
 - name: Execute script to secure SSH
   ansible.builtin.shell: /root/secure_sshd.sh
   notify:
-    - update packages  
+    - restart sshd
 
 - name: Update all packages
   ansible.builtin.dnf:
