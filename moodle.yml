@@ -12,13 +12,17 @@
 #   roles:
 #     - role: bertvv.mariadb
     
-- hosts: nfsservers
+# - hosts: nfsservers
+#   remote_user: root
+#   gather_facts: true
+#   roles:
+#     - role: nfs
+
+- hosts: cacheservers
   remote_user: root
   gather_facts: true
-  # vars_files:
-  #   - nfs.yml
   roles:
-    - role: nfs
+    - role: cache
 
 # - hosts: webservers
 #   remote_user: root

@@ -10,3 +10,6 @@ all:
     nfsservers:
       hosts:
         192.168.56.119:
+    cacheservers:
+      hosts:
+        192.168.56.119:

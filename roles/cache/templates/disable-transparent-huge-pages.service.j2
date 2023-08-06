@@ -1,0 +1,9 @@
+[Unit]
+Description=Disable Transparent Huge Pages
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c "/usr/bin/echo "never" | tee /sys/kernel/mm/transparent_hugepage/enabled"
+
+[Install]
+WantedBy=multi-user.target
