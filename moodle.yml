@@ -7,22 +7,20 @@
 # - hosts: dbservers
 #   remote_user: root
 #   gather_facts: true
-#   vars_files:
-#     - vars/database.yml
 #   roles:
-#     - role: bertvv.mariadb
+#     - role: database
     
-# - hosts: nfsservers
-#   remote_user: root
-#   gather_facts: true
-#   roles:
-#     - role: nfs
-
-- hosts: cacheservers
+- hosts: nfsservers
   remote_user: root
   gather_facts: true
   roles:
-    - role: cache
+    - role: nfs
+
+# - hosts: cacheservers
+#   remote_user: root
+#   gather_facts: true
+#   roles:
+#     - role: cache
 
 # - hosts: webservers
 #   remote_user: root
