@@ -7,3 +7,6 @@ all:
     dbservers:
       hosts:
         192.168.56.118:
+    nfsservers:
+      hosts:
+        192.168.56.119:

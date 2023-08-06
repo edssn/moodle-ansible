@@ -12,10 +12,18 @@
 #   roles:
 #     - role: bertvv.mariadb
     
-- hosts: webservers
+- hosts: nfsservers
   remote_user: root
   gather_facts: true
+  # vars_files:
+  #   - nfs.yml
   roles:
-    - role: web
+    - role: nfs
+
+# - hosts: webservers
+#   remote_user: root
+#   gather_facts: true
+#   roles:
+#     - role: web
     
 #ansible-playbook -i inventory/main.yml moodle.yml

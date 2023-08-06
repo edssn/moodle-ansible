@@ -1,0 +1,1 @@
+nfs_exports: [ "/dir    192.168.1.101(rw,sync,no_root_squash,no_subtree_check)" ]

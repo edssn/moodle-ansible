@@ -1,3 +1,4 @@
 roles/common/templates/authorized_keys.j2
 roles/web/files/*.conf
+roles/nfs/vars/*.yml
 vars/database.yml

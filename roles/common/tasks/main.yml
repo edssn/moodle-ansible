@@ -59,3 +59,12 @@
       - wget
       - tar
     state: latest
+
+- name: Disable unnecessary FirewallD rules
+  ansible.posix.firewalld:
+    permanent: true
+    service: "{{ item }}"
+    state: disabled
+  with_items:
+    - cockpit
+    - dhcpv6-client
