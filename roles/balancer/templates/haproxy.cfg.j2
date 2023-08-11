@@ -28,7 +28,7 @@ global
 {% if haproxy_chroot != '' %}
     chroot      {{ haproxy_chroot }}
 {% endif %}
-    pidfile     /var/run/haproxy.pid
+    # pidfile     /var/run/haproxy.pid
     maxconn     4000
     user {{ haproxy_user }}
     group {{ haproxy_group }}
@@ -105,7 +105,8 @@ frontend {{ haproxy_frontend_name }}
 #---------------------------------------------------------------------
 # Admin Web Interface 
 #---------------------------------------------------------------------
-listen haproxy3-monitoring
+# listen haproxy3-monitoring
+frontend {{ haproxy_admin_name }}
     bind    {{ haproxy_admin_bind_address }}:{{ haproxy_admin_port }}
     mode    {{ haproxy_admin_mode }}
     stats   enable
@@ -125,6 +126,7 @@ listen haproxy3-monitoring
 backend {{ haproxy_backend_name }}
     mode {{ haproxy_backend_mode }}
     balance {{ haproxy_backend_balance_method }}
+    # redirect scheme https if !{ ssl_fc }
 
 {% for backend in haproxy_backend_servers %}
     server {{ backend.name }} {{ backend.address }}
