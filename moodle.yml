@@ -1,3 +1,13 @@
+- hosts: all
+  remote_user: root
+  gather_facts: true
+  vars:
+    disable_services:
+      - cockpit
+      - dhcpv6-client
+  roles:
+    - role: firewall
+
 # - hosts: all
 #   remote_user: root
 #   gather_facts: true
@@ -34,23 +44,23 @@
 #   roles:
 #     - role: balancer
 
-- hosts: all
-  remote_user: root
-  gather_facts: true
-  vars:
-    enable_services:
-      - nfs
-      - http
-    enable_ports:
-      - 3306/tcp
-      - 5432/tcp
-    disable_services:
-      - nfs
-      - http
-    disable_ports:
-      - 3306/tcp
-      - 5432/tcp
-  roles:
-    - role: firewall
+# - hosts: all
+#   remote_user: root
+#   gather_facts: true
+#   vars:
+#     enable_services:
+#       - nfs
+#       - http
+#     enable_ports:
+#       - 3306/tcp
+#       - 5432/tcp
+#     disable_services:
+#       - nfs
+#       - http
+#     disable_ports:
+#       - 3306/tcp
+#       - 5432/tcp
+#   roles:
+#     - role: firewall
     
 #ansible-playbook -i inventory/main.yml moodle.yml
