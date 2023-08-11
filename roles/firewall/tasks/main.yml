@@ -6,6 +6,7 @@
     state: enabled
   loop: "{{ enable_services }}"
   notify: reload firewald
+  when: enable_services is defined
 
 - name: Enable firewalld ports
   ansible.posix.firewalld:
@@ -14,19 +15,22 @@
     state: enabled
   loop: "{{ enable_ports }}"
   notify: reload firewald
+  when: enable_ports is defined
 
 - name: Disable firewalld services
   ansible.posix.firewalld:
     permanent: true
     service: "{{ item }}"
     state: disabled
-  loop: "{{ enable_services }}"
+  loop: "{{ disable_services }}"
   notify: reload firewald
+  when: disable_services is defined
 
 - name: Disable firewalld ports
   ansible.posix.firewalld:
     permanent: true
     port: "{{ item }}"
     state: disabled
-  loop: "{{ enable_ports }}"
+  loop: "{{ disable_ports }}"
   notify: reload firewald
+  when: disable_ports is defined
