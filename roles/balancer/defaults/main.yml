@@ -1,0 +1,46 @@
+---
+haproxy_socket: /var/lib/haproxy/stats
+haproxy_chroot: /var/lib/haproxy
+haproxy_user: haproxy
+haproxy_group: haproxy
+
+# Frontend settings.
+haproxy_frontend_name: 'main'
+haproxy_frontend_bind_address: '*'
+haproxy_frontend_port: 80
+haproxy_frontend_mode: 'http'
+
+# Listen Web Admin settings.
+haproxy_admin_bind_address: '*'
+haproxy_admin_port: 80
+haproxy_admin_mode: 'http'
+haproxy_admin_refresh: '30s'
+haproxy_admin_uri: '/stats'
+haproxy_admin_user: 'admin'
+haproxy_admin_password: 'password'
+
+# Backend settings.
+haproxy_backend_name: 'moodle'
+haproxy_backend_mode: 'http'
+haproxy_backend_balance_method: 'roundrobin'
+
+# List of backend servers.
+haproxy_backend_servers:
+  - name: web1
+    address: 192.168.56.118:80
+# - name: app2
+#   address: 192.168.0.2:80
+
+# Extra global vars (see README for example usage).
+haproxy_global_vars:
+  - '# utilize system-wide crypto-policies'
+  - 'ssl-default-bind-ciphers PROFILE=SYSTEM'
+  - 'ssl-default-server-ciphers PROFILE=SYSTEM'
+  - 'tune.ssl.default-dh-param 2048'
+  - 'ssl-default-bind-options ssl-min-ver TLSv1.2'
+  - 'ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384'
+
+# Default haproxy timeouts
+haproxy_connect_timeout: 10s
+haproxy_client_timeout: 1m
+haproxy_server_timeout: 1m

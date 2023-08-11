@@ -10,11 +10,11 @@
 #   roles:
 #     - role: database
     
-- hosts: nfsservers
-  remote_user: root
-  gather_facts: true
-  roles:
-    - role: nfs
+# - hosts: nfsservers
+#   remote_user: root
+#   gather_facts: true
+#   roles:
+#     - role: nfs
 
 # - hosts: cacheservers
 #   remote_user: root
@@ -27,5 +27,11 @@
 #   gather_facts: true
 #   roles:
 #     - role: web
+
+- hosts: balancerservers
+  remote_user: root
+  gather_facts: true
+  roles:
+    - role: balancer
     
 #ansible-playbook -i inventory/main.yml moodle.yml

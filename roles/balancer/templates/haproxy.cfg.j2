@@ -1,0 +1,138 @@
+#---------------------------------------------------------------------
+# Example configuration for a possible web application.  See the
+# full configuration options online.
+#
+#   https://www.haproxy.org/download/1.8/doc/configuration.txt
+#
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+# Global settings
+#---------------------------------------------------------------------
+global
+    # to have these messages end up in /var/log/haproxy.log you will
+    # need to:
+    #
+    # 1) configure syslog to accept network log events.  This is done
+    #    by adding the '-r' option to the SYSLOGD_OPTIONS in
+    #    /etc/sysconfig/syslog
+    #
+    # 2) configure local2 events to go to the /var/log/haproxy.log
+    #   file. A line like the following can be added to
+    #   /etc/sysconfig/syslog
+    #
+    #    local2.*                       /var/log/haproxy.log
+    #
+    log         127.0.0.1 local2
+
+{% if haproxy_chroot != '' %}
+    chroot      {{ haproxy_chroot }}
+{% endif %}
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user {{ haproxy_user }}
+    group {{ haproxy_group }}
+    daemon
+
+{% if haproxy_socket != '' %}
+    # turn on stats unix socket
+    stats socket {{ haproxy_socket }}
+{% endif %}
+
+{% for global_var in haproxy_global_vars %}
+    {{ global_var }}
+{% endfor %}
+
+#---------------------------------------------------------------------
+# common defaults that all the 'listen' and 'backend' sections will
+# use if not designated in their block
+#---------------------------------------------------------------------
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+{% if haproxy_version is version('1.4', '<=') %}
+    contimeout              {{ haproxy_connect_timeout }}
+    clitimeout              {{ haproxy_client_timeout }}
+    srvtimeout              {{ haproxy_server_timeout }}
+{% else %}
+    timeout connect         {{ haproxy_connect_timeout }}
+    timeout client          {{ haproxy_client_timeout }}
+    timeout server          {{ haproxy_server_timeout }}
+{% endif %}
+{% if ansible_os_family == 'Debian' %}
+    errorfile 400 /etc/haproxy/errors/400.http
+    errorfile 403 /etc/haproxy/errors/403.http
+    errorfile 408 /etc/haproxy/errors/408.http
+    errorfile 500 /etc/haproxy/errors/500.http
+    errorfile 502 /etc/haproxy/errors/502.http
+    errorfile 503 /etc/haproxy/errors/503.http
+    errorfile 504 /etc/haproxy/errors/504.http
+{% endif %}
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 30000
+
+#---------------------------------------------------------------------
+# main frontend which proxys to the backends
+#---------------------------------------------------------------------
+frontend {{ haproxy_frontend_name }}
+    bind {{ haproxy_frontend_bind_address }}:{{ haproxy_frontend_port }}
+    mode {{ haproxy_frontend_mode }}
+    default_backend {{ haproxy_backend_name }}
+
+    # Uncomment this to enable SSL
+    # cat /dir/cert.crt /dir/cert.bundle /dir/cert.key > /etc/pki/tls/certs/cert.pem
+    # bind *:443 ssl crt /etc/pki/tls/certs/cert.pem
+
+    # Send Real IP to Backend Servers
+    # https://ypereirareis.github.io/blog/2019/06/04/real-client-ip-address-nginx-behind-haproxy-reverse-proxy/
+    # option forwardfor header X-Real-IP
+    # http-request set-header X-Real-IP %[src]
+
+    # Let's Encrypt (Only if LetsEncrypt is used)
+    # acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+    # use_backend letsencrypt-backend if letsencrypt-acl
+
+# Levanta puerto para interface web
+#---------------------------------------------------------------------
+# Admin Web Interface 
+#---------------------------------------------------------------------
+listen haproxy3-monitoring
+    bind    {{ haproxy_admin_bind_address }}:{{ haproxy_admin_port }}
+    mode    {{ haproxy_admin_mode }}
+    stats   enable
+    stats   hide-version
+    stats   show-legends
+    stats   refresh           {{ haproxy_admin_refresh }}
+    stats   uri               {{ haproxy_admin_uri }}
+    stats   realm             Haproxy\ Statistics
+    stats   auth              {{ haproxy_admin_user }}:{{ haproxy_admin_password }}
+    stats   admin             if TRUE
+    # stats admin if localhost   # enable to restrict to localhost
+    # stats admin if 10.0.0.0/8  # enable to restrict to 10.x.x.x network sources
+
+#---------------------------------------------------------------------
+# round robin balancing between the various backends
+#---------------------------------------------------------------------
+backend {{ haproxy_backend_name }}
+    mode {{ haproxy_backend_mode }}
+    balance {{ haproxy_backend_balance_method }}
+
+{% for backend in haproxy_backend_servers %}
+    server {{ backend.name }} {{ backend.address }}
+{% endfor %}
+
+#--------------------------------------------------------------------
+# This backend, which only handles Let’s Encrypt ACME challenges that 
+# are used for certificate requests and renewals
+#-------------------------------------------------------------------
+# backend letsencrypt-backend
+#    server letsencrypt 127.0.0.1:54321

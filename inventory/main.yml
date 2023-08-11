@@ -13,3 +13,6 @@ all:
     cacheservers:
       hosts:
         192.168.56.119:
+    balancerservers:
+      hosts:
+        192.168.56.119:

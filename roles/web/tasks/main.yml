@@ -1,4 +1,4 @@
-# # Php-fpm
+# Php-fpm
 - name: Update all packages
   ansible.builtin.dnf:
     name: "*"
@@ -61,6 +61,7 @@
       - php-xmlrpc
       - php-gd
       - php-sodium
+    state: latest
 
 - name: Copy php-fpm config file  
   ansible.builtin.copy:  

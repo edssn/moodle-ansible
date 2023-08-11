@@ -1,0 +1,54 @@
+# - name: Update all packages
+#   ansible.builtin.dnf:
+#     name: "*"
+#     state: latest
+#     update_cache: yes
+
+- name: Add HAproxy repository
+  ansible.builtin.yum_repository:
+    name: home_joramk_haproxy26
+    description: HAProxy v2.6 (CentOS_8)
+    file: home_joramk_haproxy26
+    baseurl: https://download.opensuse.org/repositories/home:/joramk:/haproxy26/CentOS_8/
+    gpgcheck: 1
+    gpgkey: https://download.opensuse.org/repositories/home:/joramk:/haproxy26/CentOS_8/repodata/repomd.xml.key
+    enabled: 1
+
+- name: Update all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Install HAproxy 
+  ansible.builtin.package:
+    name: haproxy
+    state: latest
+
+- name: Get HAProxy version
+  command: haproxy -v
+  register: haproxy_version_result
+  changed_when: false
+  check_mode: false
+
+- name: Set HAProxy version.
+  set_fact:
+    haproxy_version: '{{ haproxy_version_result.stdout_lines[0] | regex_replace("^HA-?Proxy version (\d+(\.\d+)*).*$", "\1") }}'
+
+- name: Print haproxy_version
+  ansible.builtin.debug:
+    var: haproxy_version
+
+- name: Copy HAProxy configuration in place.
+  ansible.builtin.template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    # backup: true
+    owner: root
+    mode: 0644
+    validate: haproxy -f %s -c -q
+  notify: restart haproxy
+
+- name: Enable haproxy service
+  ansible.builtin.service:
+    enabled: true
+    name: haproxy
