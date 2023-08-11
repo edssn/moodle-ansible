@@ -1,0 +1,5 @@
+---
+- name: reload firewald
+  ansible.builtin.service:
+    name: firewalld
+    state: reloaded

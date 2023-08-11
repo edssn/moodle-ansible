@@ -1,0 +1,32 @@
+---
+- name: Enable firewalld services
+  ansible.posix.firewalld:
+    permanent: true
+    service: "{{ item }}"
+    state: enabled
+  loop: "{{ enable_services }}"
+  notify: reload firewald
+
+- name: Enable firewalld ports
+  ansible.posix.firewalld:
+    permanent: true
+    port: "{{ item }}"
+    state: enabled
+  loop: "{{ enable_ports }}"
+  notify: reload firewald
+
+- name: Disable firewalld services
+  ansible.posix.firewalld:
+    permanent: true
+    service: "{{ item }}"
+    state: disabled
+  loop: "{{ enable_services }}"
+  notify: reload firewald
+
+- name: Disable firewalld ports
+  ansible.posix.firewalld:
+    permanent: true
+    port: "{{ item }}"
+    state: disabled
+  loop: "{{ enable_ports }}"
+  notify: reload firewald
