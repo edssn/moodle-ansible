@@ -23,30 +23,31 @@
 #   roles:
 #     - role: cache
 
-# - hosts: webservers
-#   roles:
-#     - role: web
+- hosts: webservers
+  roles:
+    - role: web
 
 # - hosts: balancerservers
 #   gather_facts: true
 #   roles:
 #     - role: balancer
 
-# Configure Firewall Rules
-- hosts: dbservers
-  vars:
-    enable_services:
-      - mysql
-  roles:
-    - role: firewall
 
-- hosts: nfsservers
-  vars:
-    enable_services:
-      - nfs
-      - rpc-bind
-  roles:
-    - role: firewall
+# Configure Firewall Rules
+# - hosts: dbservers
+#   vars:
+#     enable_services:
+#       - mysql
+#   roles:
+#     - role: firewall
+
+# - hosts: nfsservers
+#   vars:
+#     enable_services:
+#       - nfs
+#       - rpc-bind
+#   roles:
+#     - role: firewall
 
 # - hosts: cacheservers
 #   vars:

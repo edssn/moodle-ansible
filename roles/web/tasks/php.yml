@@ -1,0 +1,89 @@
+# Php-fpm
+- name: Update all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+- name: Import remi GPG key.
+  rpm_key:
+    key: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2018"
+    state: present
+
+- name: Install PHP prerequisite Packages
+  ansible.builtin.package:
+    name: 
+      - epel-release
+      - nfs-utils
+      - https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+    state: latest
+
+- name: Reset php module
+  ansible.builtin.command: dnf module reset php -y
+  args:
+    warn: false
+
+- name: Reset php Remi Repo
+  ansible.builtin.command: dnf module enable php:remi-7.4 -y
+  args:
+    warn: false
+
+- name: Update all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Install Php Modules 
+  ansible.builtin.package:
+    name: 
+      - php
+      - php-iconv
+      - php-mbstring
+      - php-fpm
+      - php-curl
+      - php-tokenizer
+      - php-xmlrpc
+      - php-soap
+      - php-ctype
+      - php-zip
+      - php-simplexml
+      - php-spl
+      - php-pcre
+      - php-dom
+      - php-intl
+      - php-json
+      - php-xmlreader
+      - php-ldap
+      - php-redis
+      - php-memcached
+      - php-opcache
+      - php-mysqli
+      - php-xmlrpc
+      - php-gd
+      - php-sodium
+    state: latest
+
+- name: Copy php-fpm config file  
+  ansible.builtin.copy:  
+    src: www.conf  
+    dest: /etc/php-fpm.d/www.conf
+    owner: root
+    group: root
+    mode: '0644'
+    force: true
+
+- name: Replace max_input_vars in php.ini
+  ansible.builtin.replace:
+    path: /etc/php.ini
+    regexp: '^;*max_input_vars.*'
+    replace: 'max_input_vars = 5000'
+
+- name: Enable php-fpm service
+  ansible.builtin.service:
+    enabled: true
+    name: php-fpm
+
+- name: Start php-fpm service
+  ansible.builtin.service:
+    name: php-fpm
+    state: started

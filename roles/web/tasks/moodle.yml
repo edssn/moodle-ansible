@@ -1,0 +1,22 @@
+# Download Moodle
+- name: Download moodle
+  ansible.builtin.get_url:
+    url: https://download.moodle.org/download.php/direct/stable401/moodle-latest-401.tgz
+    dest: /var/www/moodle.tgz
+    mode: '0440'
+
+- name: Extract moodle.tgz
+  ansible.builtin.unarchive:
+    src: /var/www/moodle.tgz
+    dest: /var/www
+    owner: root
+    group: root
+    remote_src: yes
+
+- name: Create moodledata dir
+  ansible.builtin.file:
+    path: /var/www/moodledata
+    state: directory
+    owner: nginx
+    group: nginx
+    mode: '0700'
