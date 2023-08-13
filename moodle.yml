@@ -1,74 +1,100 @@
-## Software Installation
-# - hosts: all
-#   vars:
-#     disable_services:
-#       - cockpit
-#       - dhcpv6-client
-#   roles:
-#     - role: firewall
+# Software Installation
+
+# Common tasks
+- hosts: all
+  vars:
+    disable_services:
+      - cockpit
+      - dhcpv6-client
+  roles:
+    - role: firewall
 
 - hosts: all
   roles:
     - role: common
 
-# - hosts: dbservers
-#   roles:
-#     - role: database
-    
-# - hosts: nfsservers
-#   roles:
-#     - role: nfs
 
-# - hosts: cacheservers
-#   roles:
-#     - role: cache
+# DB Node
+- hosts: dbservers
+  roles:
+    - role: database
 
-# - hosts: webservers
-#   roles:
-#     - role: web
+- hosts: dbservers
+  vars:
+    enable_services:
+      - mysql
+      - zabbix-agent
+  roles:
+    - role: firewall
 
-# - hosts: balancerservers
-#   gather_facts: true
-#   roles:
-#     - role: balancer
 
+# NFS Node
+- hosts: nfsservers
+  roles:
+    - role: nfs
+
+- hosts: nfsservers
+  vars:
+    enable_services:
+      - nfs
+      - rpc-bind
+      - zabbix-agent
+  roles:
+    - role: firewall
+
+
+# Cache Node
+- hosts: cacheservers
+  roles:
+    - role: cache
+
+- hosts: cacheservers
+  vars:
+    enable_services:
+      - redis
+      - zabbix-agent
+  roles:
+    - role: firewall
+
+
+# Web Node
+- hosts: webservers
+  roles:
+    - role: web
+
+- hosts: webservers
+  vars:
+    enable_services:
+      - http
+      - zabbix-agent
+  roles:
+    - role: firewall
+
+
+# Bal Node
+- hosts: balancerservers
+  gather_facts: true
+  roles:
+    - role: balancer
+
+- hosts: balancerservers
+  vars:
+    enable_services:
+      - http
+      - https
+      - zabbix-agent
+  roles:
+    - role: firewall
 
 # Configure Firewall Rules
-# - hosts: dbservers
-#   vars:
-#     enable_services:
-#       - mysql
-#   roles:
-#     - role: firewall
 
-# - hosts: nfsservers
-#   vars:
-#     enable_services:
-#       - nfs
-#       - rpc-bind
-#   roles:
-#     - role: firewall
 
-# - hosts: cacheservers
-#   vars:
-#     enable_services:
-#       - redis
-#   roles:
-#     - role: firewall
 
-# - hosts: webservers
-#   vars:
-#     enable_services:
-#       - http
-#   roles:
-#     - role: firewall
 
-# - hosts: balancerservers
-#   vars:
-#     enable_services:
-#       - http
-#       - https
-#   roles:
-#     - role: firewall
 
-#ansible-playbook moodle.yml
+
+
+
+
+
+# ansible-playbook moodle.yml
