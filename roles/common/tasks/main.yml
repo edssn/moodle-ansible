@@ -1,3 +1,12 @@
+- name: Add IP address of all hosts to all hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item].ansible_host }}  {{item}}"
+    state: present
+  when: hostvars[item].ansible_host is defined
+  with_items: "{{ groups.all }}"
+
 - name: Update SSH Authorized Keys  
   ansible.builtin.template:  
     src: authorized_keys.j2  
@@ -59,12 +68,3 @@
       - wget
       - tar
     state: latest
-
-# - name: Disable unnecessary FirewallD rules
-#   ansible.posix.firewalld:
-#     permanent: true
-#     service: "{{ item }}"
-#     state: disabled
-#   loop:
-#     - cockpit
-#     - dhcpv6-client

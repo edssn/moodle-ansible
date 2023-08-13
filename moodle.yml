@@ -7,9 +7,9 @@
 #   roles:
 #     - role: firewall
 
-# - hosts: all
-#   roles:
-#     - role: common
+- hosts: all
+  roles:
+    - role: common
 
 # - hosts: dbservers
 #   roles:
@@ -23,9 +23,9 @@
 #   roles:
 #     - role: cache
 
-- hosts: webservers
-  roles:
-    - role: web
+# - hosts: webservers
+#   roles:
+#     - role: web
 
 # - hosts: balancerservers
 #   gather_facts: true

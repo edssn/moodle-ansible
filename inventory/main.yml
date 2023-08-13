@@ -1,18 +1,37 @@
 ---
 all:
-  children:
-    webservers:
-      hosts:
-        192.168.56.119:
-    dbservers:
-      hosts:
-        192.168.56.119:
-    nfsservers:
-      hosts:
-        192.168.56.119:
-    cacheservers:
-      hosts:
-        192.168.56.119:
-    balancerservers:
-      hosts:
-        192.168.56.119:
+  # Define the aliases here
+  hosts:
+    web1:
+      ansible_host: 192.168.56.119
+    db:
+      ansible_host: 192.168.56.119
+    nfs:
+      ansible_host: 192.168.56.118
+    cache:
+      ansible_host: 192.168.56.119
+    bal:
+      ansible_host: 192.168.56.119
+
+# Create a group called webserver and add web1
+webservers:
+  hosts:
+    web1:
+
+dbservers:
+  hosts:
+    db:
+
+nfsservers:
+  hosts:
+    nfs:
+
+cacheservers:
+  hosts:
+    cache:
+
+balservers:
+  hosts:
+    bal:
+
+# https://notes.benheater.com/books/ansible/page/defining-the-inventory
