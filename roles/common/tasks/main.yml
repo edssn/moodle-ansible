@@ -9,9 +9,8 @@
 
 - name: Configure hostname in all hosts
   ansible.builtin.hostname:
-    name: "{{ hostvars[item].ansible_hostname }}"
-  when: hostvars[item].ansible_hostname is defined
-  loop: "{{ groups.all }}"
+    name: "{{ hostvars[inventory_hostname].new_hostname }}"
+  when: hostvars[inventory_hostname].new_hostname is defined
 
 - name: Update SSH Authorized Keys  
   ansible.builtin.template:  
@@ -55,8 +54,6 @@
   ansible.builtin.package:
     name: epel-release
     state: latest
-  notify:
-    - update packages
 
 - name: Update all packages
   ansible.builtin.dnf:

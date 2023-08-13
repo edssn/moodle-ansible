@@ -4,19 +4,19 @@ all:
   hosts:
     db:
       ansible_host: 192.168.56.118
-      ansible_hostname: moodle-db.local
+      new_hostname: moodle-db.local
     nfs:
       ansible_host: 192.168.56.123
-      ansible_hostname: moodle-nfs.local
+      new_hostname: moodle-nfs.local
     cache:
       ansible_host: 192.168.56.124
-      ansible_hostname: moodle-cache.local
+      new_hostname: moodle-cache.local
     web1:
       ansible_host: 192.168.56.125
-      ansible_hostname: moodle-web1.local
+      new_hostname: moodle-web1.local
     bal:
       ansible_host: 192.168.56.126
-      ansible_hostname: moodle-bal.local
+      new_hostname: moodle-bal.local
 
 # Create a group called webserver and add web1
 webservers:
