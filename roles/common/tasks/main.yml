@@ -7,6 +7,12 @@
   when: hostvars[item].ansible_host is defined
   with_items: "{{ groups.all }}"
 
+- name: Configure hostname in all hosts
+  ansible.builtin.hostname:
+    name: "{{ hostvars[item].ansible_hostname }}"
+  when: hostvars[item].ansible_hostname is defined
+  loop: "{{ groups.all }}"
+
 - name: Update SSH Authorized Keys  
   ansible.builtin.template:  
     src: authorized_keys.j2  
