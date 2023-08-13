@@ -34,3 +34,24 @@
   loop: "{{ disable_ports }}"
   notify: reload firewald
   when: disable_ports is defined
+
+
+## Example 
+# - hosts: all
+#   remote_user: root
+#   gather_facts: true
+#   vars:
+#     enable_services:
+#       - nfs
+#       - http
+#     enable_ports:
+#       - 3306/tcp
+#       - 5432/tcp
+#     disable_services:
+#       - nfs
+#       - http
+#     disable_ports:
+#       - 3306/tcp
+#       - 5432/tcp
+#   roles:
+#     - role: firewall

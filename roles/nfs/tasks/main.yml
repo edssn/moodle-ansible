@@ -36,7 +36,7 @@
 #     name: "{{ item }}" 
 #     state: started 
 #     enabled: yes
-#   with_items:
+#   loop:
 #     - rpcbind
 #     - nfs-server
 
@@ -53,12 +53,12 @@
   ansible.builtin.include_role:
     name: geerlingguy.nfs
 
-- name: Enable NFS FirewallD rules
-  ansible.posix.firewalld:
-    permanent: true
-    service: "{{ item }}"
-    state: enabled
-  with_items:
-    - nfs
-    - rpc-bind
-  notify: reload firewald
+# - name: Enable NFS FirewallD rules
+#   ansible.posix.firewalld:
+#     permanent: true
+#     service: "{{ item }}"
+#     state: enabled
+#   loop:
+#     - nfs
+#     - rpc-bind
+#   notify: reload firewald
