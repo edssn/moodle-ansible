@@ -8,21 +8,31 @@
       - dhcpv6-client
   roles:
     - role: firewall
+
+- hosts: all
+  roles:
     - role: common
 
 
 # DB Node
+- hosts: dbservers
+  roles:
+    - role: database
+
 - hosts: dbservers
   vars:
     enable_services:
       - mysql
       - zabbix-agent
   roles:
-    - role: database
     - role: firewall
 
 
 # NFS Node
+- hosts: nfsservers
+  roles:
+    - role: nfs
+
 - hosts: nfsservers
   vars:
     enable_services:
@@ -30,33 +40,43 @@
       - rpc-bind
       - zabbix-agent
   roles:
-    - role: nfs
     - role: firewall
 
 
 # Cache Node
+- hosts: cacheservers
+  roles:
+    - role: cache
+
 - hosts: cacheservers
   vars:
     enable_services:
       - redis
       - zabbix-agent
   roles:
-    - role: cache
     - role: firewall
 
 
 # Web Node
+- hosts: webservers
+  roles:
+    - role: web
+
 - hosts: webservers
   vars:
     enable_services:
       - http
       - zabbix-agent
   roles:
-    - role: web
     - role: firewall
 
 
-# Balancer Node
+# Bal Node
+- hosts: balancerservers
+  gather_facts: true
+  roles:
+    - role: balancer
+
 - hosts: balancerservers
   vars:
     enable_services:
@@ -64,7 +84,17 @@
       - https
       - zabbix-agent
   roles:
-    - role: balancer
     - role: firewall
+
+# Configure Firewall Rules
+
+
+
+
+
+
+
+
+
 
 # ansible-playbook moodle.yml

@@ -1,10 +1,4 @@
 # Php-fpm
-- name: Update all packages
-  ansible.builtin.dnf:
-    name: "*"
-    state: latest
-    update_cache: yes
-
 - name: Import remi GPG key.
   rpm_key:
     key: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2018"
