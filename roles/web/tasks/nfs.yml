@@ -1,7 +1,7 @@
 ## Mount moodledata dir if moodle is in cluster
 - name: Mount moodledata
   ansible.posix.mount:
-    src: '{{ nfs_server_ip }}:/var/moodledata'
+    src: nfs:/var/moodledata
     path: /var/www/moodledata
     opts: defaults
     boot: true
